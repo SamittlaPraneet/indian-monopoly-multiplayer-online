@@ -162,7 +162,8 @@ await host.act({ type: "start" });
 const started = await host.snapshot();
 assert.ok(started.game);
 assert.equal((await guest.snapshot()).game.turn, started.game.turn);
-assert.equal(JSON.stringify(started.game).includes('"decks"'), false);
+assert.equal("chance" in started.game, false);
+assert.equal("chest" in started.game, false);
 await host.act({ type: "roll", dice: [6, 6] }, false).then(
   () => assert.fail("Forged dice accepted"),
   () => {},

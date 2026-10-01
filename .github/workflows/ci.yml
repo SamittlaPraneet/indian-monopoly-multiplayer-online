@@ -17,6 +17,12 @@ jobs:
       - run: npm run ci
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
+      - name: Verify deployed two-guest room flow
+        if: github.event_name == 'pull_request'
+        env:
+          TEST_BASE_URL: https://indian-monopoly-multiplayer-online.vercel.app
+          TEST_ONLINE: "1"
+        run: npx playwright test tests/browser/online.spec.ts
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
