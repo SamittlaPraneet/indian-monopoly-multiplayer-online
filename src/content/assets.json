@@ -1,0 +1,309 @@
+[
+  {
+    "file": "/art/city-1.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Cherrapunji; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-3.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Kavaratti; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-6.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Srinagar; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-8.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Amritsar; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-9.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Bhubaneswar; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-11.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Kochi; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-13.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Jaipur; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-14.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Lucknow; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-16.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Visakhapatnam; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-18.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Indore; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-19.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Nagpur; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-21.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Ahmedabad; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-23.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Chandigarh; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-24.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Pune; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-26.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Chennai; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-27.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Kolkata; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-29.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Hyderabad; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-31.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Bengaluru; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-32.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Gurugram; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-34.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Delhi; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-37.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Goa; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-39.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Mumbai; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-0.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised GO; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-2.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Community Chest; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-4.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Income Tax; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-5.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised CSMT; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-7.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Chance; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-10.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Jail / Just Visiting; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-12.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised BSNL; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-15.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Howrah Junction; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-17.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Community Chest; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-20.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Free Parking; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-22.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Chance; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-25.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Delhi Airport; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-28.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Cochin Port; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-30.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Go to Jail; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-33.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Community Chest; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-35.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Bengaluru Airport; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-36.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Chance; illustrative, not an architectural drawing"
+  },
+  {
+    "file": "/art/city-38.svg",
+    "creator": "Original project artwork",
+    "licence": "Project-owned original artwork",
+    "source": "scripts/art.py",
+    "description": "Stylised Luxury Tax; illustrative, not an architectural drawing"
+  },
+  {
+    "tile": 39,
+    "file": "/art/city-39.webp",
+    "creator": "Simon Steinberger",
+    "licence": "CC0-1.0",
+    "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Gateway-of-India.jpg",
+    "changes": "Resized, metadata removed and compressed to WebP. Photo remains under original licence."
+  },
+  {
+    "tile": 16,
+    "file": "/art/city-16.webp",
+    "creator": "Maina Tudu",
+    "licence": "CC0-1.0",
+    "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:INS_Kursura_(S20)_in_2023.jpg",
+    "changes": "Resized, metadata removed and compressed to WebP. Photo remains under original licence."
+  },
+  {
+    "tile": 29,
+    "file": "/art/city-29.webp",
+    "creator": "Rashid Jorvee",
+    "licence": "CC-BY-SA-4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Charminar_complete_view.jpg",
+    "changes": "Resized, metadata removed and compressed to WebP. Photo remains under original licence."
+  }
+]
