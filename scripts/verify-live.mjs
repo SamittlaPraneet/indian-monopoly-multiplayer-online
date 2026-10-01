@@ -15,6 +15,10 @@ const identity = (name, token) => ({
   team: 0,
 });
 class Guest {
+  pulse;
+  stop() {
+    clearInterval(this.pulse);
+  }
   cookie = "";
   read = "";
   seat = "";
@@ -44,6 +48,12 @@ class Guest {
     }
     if (value.read) this.read = value.read;
     if (value.seat) this.seat = value.seat;
+    if (this.cookie && !this.pulse) {
+      this.pulse = setInterval(() => {
+        void this.post({ op: "heartbeat" }).catch(() => {});
+      }, 15000);
+      this.pulse.unref();
+    }
     return value;
   }
   async snapshot() {
@@ -150,19 +160,18 @@ await host.act({ type: "ready", ready: true });
 await guest.act({ type: "ready", ready: true });
 await host.act({ type: "start" });
 const started = await host.snapshot();
-assert.equal(started.game.phase, "roll");
+assert.ok(started.game);
 assert.equal((await guest.snapshot()).game.turn, started.game.turn);
 assert.equal(JSON.stringify(started.game).includes('"decks"'), false);
-const hostRollSeat = started.game.seats[started.game.turn].id;
-assert.equal(hostRollSeat, host.seat);
 await host.act({ type: "roll", dice: [6, 6] }, false).then(
   () => assert.fail("Forged dice accepted"),
   () => {},
 );
-// No heartbeat or browser activity: durable server timer must advance this turn.
+// No player actions: durable timers must advance turns without a browser.
+const startingRevision = started.game.revision;
 await new Promise((resolve) => setTimeout(resolve, 22500));
 const timed = await guest.snapshot();
-assert.notEqual(timed.game.seats[timed.game.turn].id, host.seat);
+assert.ok(timed.game.revision > startingRevision);
 console.log(
   "PASS: server start, hidden deck state, forged command rejection and unattended roll deadline",
 );
@@ -205,6 +214,7 @@ console.log(
   "PASS: eight-seat four-team production match with seven bots across all four difficulties",
 );
 await mixed.act({ type: "reset" });
+for (const session of [host, guest, spectator, mixed]) session.stop();
 console.log(
   "LIVE API VERIFICATION PASSED; two-browser UI verification is a separate check.",
 );

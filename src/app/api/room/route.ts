@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { ConvexHttpClient } from "convex/browser";
 import { anyApi } from "convex/server";
+import { ConvexError } from "convex/values";
 import { z } from "zod";
 import { identitySchema } from "../../../lib/validation";
 export const runtime = "nodejs";
@@ -118,7 +119,12 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json(result);
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Request failed";
+    const message =
+      e instanceof ConvexError && typeof e.data === "string"
+        ? e.data
+        : e instanceof Error
+          ? e.message
+          : "Request failed";
     const cleaned =
       message.split("Uncaught Error: ").pop()?.split("\n")[0] ||
       "Request failed";

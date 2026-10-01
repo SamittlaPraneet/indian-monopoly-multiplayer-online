@@ -46,6 +46,17 @@ describe("authoritative rooms", () => {
     });
     return t;
   };
+  it("idle deadline checks preserve the revision of unchanged rooms", async () => {
+    const t = await setup();
+    const before = await t.query(anyApi.rooms.snapshot, { read: "host-read" });
+    const roomId = await t.run(
+      async (ctx) => (await ctx.db.query("rooms").first())!._id,
+    );
+    vi.setSystemTime(Date.now() + 15000);
+    await t.mutation(anyApi.rooms.tick, { room: roomId });
+    const after = await t.query(anyApi.rooms.snapshot, { read: "host-read" });
+    expect(after.revision).toBe(before.revision);
+  });
   it("independent guest snapshots, no secret or hidden state", async () => {
     const t = await setup();
     const a = await t.query(anyApi.rooms.snapshot, { read: "host-read" }),

@@ -1,4 +1,4 @@
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import { anyApi } from "convex/server";
 import {
   mutation,
@@ -14,6 +14,7 @@ import {
   newGame,
   publicGame,
   validateSettings,
+  RuleError,
 } from "../src/engine/game";
 import { botCommand, botFallback, botSeat } from "../src/engine/bot";
 import {
@@ -23,6 +24,14 @@ import {
 } from "../src/lib/validation";
 import { RoomData, Snapshot, Vote } from "../src/lib/room-types";
 import { GenericId } from "convex/values";
+function ruleResult<T>(run: () => T): T {
+  try {
+    return run();
+  } catch (error) {
+    if (error instanceof RuleError) throw new ConvexError(error.message);
+    throw error;
+  }
+}
 const inputs = (): Inputs => ({
   now: Date.now(),
   dice: () => [
@@ -43,7 +52,7 @@ function gateway(key: string) {
     !process.env.SESSION_SIGNING_KEY ||
     key !== process.env.SESSION_SIGNING_KEY
   )
-    throw Error("Unauthorised gateway");
+    throw new ConvexError("Unauthorised gateway");
 }
 async function limit(ctx: MutationCtx, key: string, max: number, seconds = 10) {
   const now = Date.now(),
@@ -52,7 +61,7 @@ async function limit(ctx: MutationCtx, key: string, max: number, seconds = 10) {
       .withIndex("key", (q) => q.eq("key", key))
       .unique();
   if (old && now - old.window < seconds * 1000) {
-    if (old.count >= max) throw Error("Slow down and try again");
+    if (old.count >= max) throw new ConvexError("Slow down and try again");
     await ctx.db.patch(old._id, { count: old.count + 1 });
   } else if (old) await ctx.db.patch(old._id, { window: now, count: 1 });
   else await ctx.db.insert("limits", { key, window: now, count: 1 });
@@ -63,9 +72,9 @@ async function session(ctx: QueryCtx, secret: string) {
     .withIndex("secret", (q) => q.eq("secret", secret))
     .unique();
   if (!s || s.revoked || s.expires < Date.now())
-    throw Error("Seat unavailable or room expired");
+    throw new ConvexError("Seat unavailable or room expired");
   const room = await ctx.db.get(s.room);
-  if (!room || room.expires < Date.now()) throw Error("Room expired");
+  if (!room || room.expires < Date.now()) throw new ConvexError("Room expired");
   return { s, room, data: room.data as RoomData };
 }
 async function schedule(
@@ -179,7 +188,7 @@ export const enter = mutation({
       .withIndex("code", (q) => q.eq("code", args.code))
       .unique();
     if (args.create) {
-      if (room) throw Error("Code collision; retry");
+      if (room) throw new ConvexError("Code collision; retry");
       const data: RoomData = {
         settings: { ...defaults },
         seats: [],
@@ -202,7 +211,7 @@ export const enter = mutation({
       room = await ctx.db.get(id);
     }
     if (!room || room.expires < Date.now())
-      throw Error("Room expired or unavailable");
+      throw new ConvexError("Room expired or unavailable");
     const data = room.data as RoomData;
     const spectator = args.spectator || !!data.game;
     const sessions = await ctx.db
@@ -211,12 +220,12 @@ export const enter = mutation({
       .collect();
     if (spectator) {
       if (sessions.filter((s) => s.spectator && !s.revoked).length >= 8)
-        throw Error("Spectator seats are full");
+        throw new ConvexError("Spectator seats are full");
     } else {
       if (data.seats.length >= data.settings.capacity)
-        throw Error("Player seats are full");
+        throw new ConvexError("Player seats are full");
       if (data.seats.some((s) => s.token === identity.token))
-        throw Error("Token is taken; choose another");
+        throw new ConvexError("Token is taken; choose another");
       data.seats.push({
         ...identity,
         id: args.seat,
@@ -342,7 +351,7 @@ export const act = mutation({
   handler: async (ctx, args) => {
     gateway(args.gateway);
     if (!/^[a-zA-Z0-9-]{8,64}$/.test(args.key))
-      throw Error("Invalid command ID");
+      throw new ConvexError("Invalid command ID");
     const { s, room, data } = await session(ctx, args.secret);
     const duplicate = await ctx.db
       .query("commands")
@@ -353,19 +362,21 @@ export const act = mutation({
     if (duplicate) return { revision: duplicate.revision, duplicate: true };
     await limit(ctx, "act:" + s.seat, 12);
     if (args.revision !== data.revision)
-      throw Error("State changed; retry from current room");
+      throw new ConvexError("State changed; retry from current room");
     const seat = data.seats.find((p) => p.id === s.seat),
       host = data.host === s.seat;
     if (!args.lobby) {
       if (s.spectator || !data.game)
-        throw Error("Players only in an active match");
+        throw new ConvexError("Players only in an active match");
       const command = commandSchema.parse(args.command);
-      data.game = apply(data.game, s.seat, command, inputs());
+      data.game = ruleResult(() =>
+        apply(data.game!, s.seat, command, inputs()),
+      );
       data.seats = data.game.seats;
     } else {
       const c = lobbySchema.parse(args.command);
       if (s.spectator && !["chat", "leave"].includes(c.type))
-        throw Error("Spectators cannot act or vote");
+        throw new ConvexError("Spectators cannot act or vote");
       if (c.type === "chat") {
         await limit(ctx, "chat:" + s.seat, 5);
         data.chat.push({
@@ -392,11 +403,11 @@ export const act = mutation({
         }
         migration(data, Date.now() + 30000);
       } else if (c.type === "reset") {
-        if (!host) throw Error("Host only");
+        if (!host) throw new ConvexError("Host only");
         if (!data.game || data.game.phase === "over") reset(data);
         else {
           if (data.votes.some((v) => v.target === "reset"))
-            throw Error("Reset vote already open");
+            throw new ConvexError("Reset vote already open");
           const voters = eligible(data, "");
           const vote: Vote = {
             id: args.key,
@@ -413,14 +424,14 @@ export const act = mutation({
         }
       } else if (c.type === "vote") {
         if (!seat?.active || !seat.connected)
-          throw Error("Active connected players only");
+          throw new ConvexError("Active connected players only");
         if (
           c.target === s.seat ||
           !data.seats.some((p) => p.id === c.target && !p.bot)
         )
-          throw Error("Invalid kick target");
+          throw new ConvexError("Invalid kick target");
         if (data.votes.some((v) => v.target === c.target))
-          throw Error("Vote already open");
+          throw new ConvexError("Vote already open");
         await limit(ctx, "vote:" + s.seat, 1, 60);
         const voters = eligible(data, c.target);
         data.votes.push({
@@ -436,40 +447,41 @@ export const act = mutation({
       } else if (c.type === "voteYes") {
         const vote = data.votes.find((v) => v.id === c.id);
         if (!vote || vote.due < Date.now() || !vote.eligible.includes(s.seat))
-          throw Error("Vote unavailable");
+          throw new ConvexError("Vote unavailable");
         if (!vote.yes.includes(s.seat)) vote.yes.push(s.seat);
       } else {
-        if (data.game) throw Error("Lobby settings are locked during a match");
-        if (!seat) throw Error("Seat unavailable");
+        if (data.game)
+          throw new ConvexError("Lobby settings are locked during a match");
+        if (!seat) throw new ConvexError("Seat unavailable");
         if (c.type === "identity") {
           if (
             data.seats.some(
               (p) => p.id !== seat.id && p.token === c.identity.token,
             )
           )
-            throw Error("Token taken");
+            throw new ConvexError("Token taken");
           if (
             data.settings.teams &&
             data.seats.filter(
               (p) => p.id !== seat.id && p.team === c.identity.team,
             ).length >= 2
           )
-            throw Error("Team is full");
+            throw new ConvexError("Team is full");
           Object.assign(seat, c.identity, { ready: false });
           await ctx.db.patch(s._id, { name: seat.name });
         }
         if (c.type === "ready") seat.ready = c.ready;
         if (c.type === "settings") {
-          if (!host) throw Error("Host only");
+          if (!host) throw new ConvexError("Host only");
           validateSettings(c.settings);
           if (c.settings.capacity < data.seats.length)
-            throw Error("Capacity below occupied seats");
+            throw new ConvexError("Capacity below occupied seats");
           data.settings = c.settings;
           for (const p of data.seats) if (!p.bot) p.ready = false;
         }
         if (c.type === "addBot") {
           if (!host || data.seats.length >= data.settings.capacity)
-            throw Error("Host only; room needs capacity");
+            throw new ConvexError("Host only; room needs capacity");
           const token = Array.from({ length: 20 }, (_, n) => n).find(
             (n) => !data.seats.some((p) => p.token === n),
           )!;
@@ -495,13 +507,13 @@ export const act = mutation({
         }
         if (c.type === "botConfig") {
           const bot = data.seats.find((p) => p.id === c.target && p.bot);
-          if (!host || !bot) throw Error("Host configures bots only");
+          if (!host || !bot) throw new ConvexError("Host configures bots only");
           if (
             data.settings.teams &&
             data.seats.filter((p) => p.id !== bot.id && p.team === c.team)
               .length >= 2
           )
-            throw Error("Team is full");
+            throw new ConvexError("Team is full");
           bot.bot = c.difficulty;
           bot.team = c.team;
           data.seats.forEach((p) => {
@@ -510,7 +522,7 @@ export const act = mutation({
         }
         if (c.type === "removeBot") {
           if (!host || !data.seats.some((p) => p.id === c.target && p.bot))
-            throw Error("Host can remove bots only");
+            throw new ConvexError("Host can remove bots only");
           data.seats = data.seats.filter((p) => p.id !== c.target);
         }
         if (c.type === "start") {
@@ -519,8 +531,12 @@ export const act = mutation({
             !data.seats.some((p) => !p.bot) ||
             data.seats.some((p) => !p.bot && (!p.ready || !p.connected))
           )
-            throw Error("Host starts when all humans are connected and ready");
-          data.game = newGame(data.seats, data.settings, inputs());
+            throw new ConvexError(
+              "Host starts when all humans are connected and ready",
+            );
+          data.game = ruleResult(() =>
+            newGame(data.seats, data.settings, inputs()),
+          );
           data.seats = data.game.seats;
         }
       }
@@ -555,6 +571,7 @@ export const tick = internalMutation({
     if (!room) return;
     const data = room.data as RoomData,
       now = Date.now();
+    const previous = JSON.stringify(data);
     for (const p of data.seats.filter((s) => !s.bot)) {
       if (p.connected && now - (data.lastSeen[p.id] ?? 0) > 45000) {
         p.connected = false;
@@ -639,7 +656,7 @@ export const tick = internalMutation({
       data.seats = g.seats;
       if (g.phase === "over") data.finishedAt = now;
     }
-    data.revision++;
+    if (JSON.stringify(data) !== previous) data.revision++;
     await schedule(ctx, room._id, data, room.expires);
   },
 });
