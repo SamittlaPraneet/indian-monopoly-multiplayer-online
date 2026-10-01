@@ -1,0 +1,30 @@
+name: Verify game
+on:
+  push:
+    branches: [main, "feat/**", "fix/**"]
+  pull_request:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - name: Verify deployed two-guest room flow
+        if: github.event_name == 'pull_request'
+        env:
+          TEST_BASE_URL: https://indian-monopoly-multiplayer-online.vercel.app
+          TEST_ONLINE: "1"
+        run: npx playwright test tests/browser/online.spec.ts
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-failure
+          path: test-results/
