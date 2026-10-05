@@ -4,14 +4,6 @@ An unofficial, private-room property-trading game for friends, with an Indian bo
 
 **Delivery status: live, with core online flows verified.** Production is available at [indian-monopoly-multiplayer-online.vercel.app](https://indian-monopoly-multiplayer-online.vercel.app).
 
-## Deployment and source
-
-The private repository is [SamittlaPraneet/indian-monopoly-multiplayer-online](https://github.com/SamittlaPraneet/indian-monopoly-multiplayer-online). Vercel is connected to that repository. Development uses `feat/complete-game`; verified source is merged to `main` for production. Credentials are held in Vercel/Convex, never in Git. The production gateway permits only the exact production origin; online mutations remain disabled on branch previews.
-
-Convex functions, schema, indexes, cron cleanup and scheduled room deadlines are deployed. Real generated TypeScript bindings replace the original bootstrap files. The initial deployment passed backend schema validation and the remote frontend build. Production is reachable with HTTP 200. Live API checks passed for three independent guest identities and secure cookies, spectator/host restrictions, origin checks, replay/stale rejection, read renewal, server start, unattended turn deadlines, majority reset and eight-seat/four-team mixed-bot setup. The cloud browser reconnected to the same room and observed a complete 12-round human/bot Fast match with purchases and winner scoring. The independent-browser production test in `tests/browser/online.spec.ts` passed on the GitHub Actions runner: two separate Chromium guest contexts create/join, receive live state, ready/start/roll, exchange escaped chat, refresh with the same secure cookie and reset by majority vote. The local execution browser lacked certificate trust for this URL; the successful remote test uses normal trusted HTTPS without bypassing certificate checks. Run `TEST_BASE_URL=https://... TEST_ONLINE=1 npm run test:browser` in a normally trusted browser environment. `scripts/verify-live.mjs` tests independent HTTP guests against the live gateway and backend without printing credentials.
-
-Full interaction and real-device coverage remains documented in the matrix below. The core deployed multiplayer flow is verified; this is not a claim of exhaustive coverage of every rule combination or device. The source archive from the initial checkpoint remains historical; use the repository for the current implementation.
-
 ## Product and content
 
 The 40-space square board has 22 cities in eight colour groups, four transport deeds, two utilities, six card spaces, two taxes and four corners. Visakhapatnam, Cherrapunji, Kavaratti, Srinagar and major cities provide broad geographic coverage. Colour groups describe fictional game prestige, not factual city rankings. Full prices, six-level city rents, mortgages, building costs, transport tiers and utility multipliers live in `src/content/board.ts`.
