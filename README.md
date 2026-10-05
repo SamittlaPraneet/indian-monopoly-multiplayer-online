@@ -2,7 +2,7 @@
 
 An unofficial, private-room property-trading game for friends, with an Indian board, Classic and Fast games, paired teams, heuristic bots and local pass-and-play. All money is fictional game money. No accounts, public matchmaking, purchases, analytics or runtime AI service are used.
 
-**Delivery status: live, with core online flows verified.** Production is available at [indian-monopoly-multiplayer-online.vercel.app](https://indian-monopoly-multiplayer-online.vercel.app). The Convex production backend is `precious-alpaca-596` in the Vercel-managed team `samittlapraneet-s-projects`, connected to the Vercel project of the same name on the Free plan. Marketplace terms were accepted with the owner's explicit approval through the dashboard; the direct CLI terms link failed with a missing billing-plan error.
+**Delivery status: live, with core online flows verified.** Production is available at [indian-monopoly-multiplayer-online.vercel.app](https://indian-monopoly-multiplayer-online.vercel.app).
 
 ## Deployment and source
 
